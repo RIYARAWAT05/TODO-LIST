@@ -1,0 +1,6 @@
+# OS generated files
+.DS_Store
+
+# IDE / agent specific directories
+.gemini/
+.agents/

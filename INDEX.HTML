@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taskflow — Premium Todo List Manager</title>
+    <meta name="description" content="Manage your daily tasks, set priorities, track deadlines, and organize your work using Taskflow, the modern and elegant Todo list.">
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Confetti Canvas for celebration -->
+    <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <i class="fa-solid fa-square-check"></i>
+                <span>Taskflow</span>
+            </div>
+            <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode">
+                <i class="fa-solid fa-moon"></i>
+                <i class="fa-solid fa-sun"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main>
+        <!-- Sidebar containing Dashboard Stats & Categories -->
+        <aside class="sidebar">
+            <!-- Progress & Numbers Card -->
+            <section class="card progress-card" aria-label="Task progress details">
+                <div class="progress-header">
+                    <span class="progress-title">Your Progress</span>
+                    <span id="progress-percent" class="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div id="progress-bar-fill" class="progress-bar-fill"></div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div id="total-tasks" class="stat-value">0</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat-item">
+                        <div id="completed-tasks" class="stat-value" style="color: var(--color-success)">0</div>
+                        <div class="stat-label">Done</div>
+                    </div>
+                    <div class="stat-item">
+                        <div id="pending-tasks" class="stat-value" style="color: var(--color-warning)">0</div>
+                        <div class="stat-label">Pending</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Categories Card -->
+            <section class="card" aria-label="Categories filter panel">
+                <h2 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem;">Categories</h2>
+                <ul id="category-list" class="category-list">
+                    <!-- Dynamic Categories inserted here -->
+                </ul>
+                
+                <!-- Add Category Form -->
+                <form id="add-category-form" class="add-category-form" aria-label="Add new category">
+                    <input type="text" id="new-category-name" class="add-category-input" placeholder="New tag..." required aria-label="Category name">
+                    <input type="color" id="new-category-color" class="add-category-color" value="#818cf8" title="Choose color" aria-label="Category color">
+                    <button type="submit" class="add-category-btn" aria-label="Add category"><i class="fa-solid fa-plus"></i></button>
+                </form>
+            </section>
+        </aside>
+
+        <!-- Task Content Area -->
+        <section class="todo-content" aria-label="Task Management Dashboard">
+            <h1 style="display: none;">Taskflow Dashboard</h1>
+            
+            <!-- Controls: Search & Filters -->
+            <div class="controls-panel">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="search-input" class="search-input" placeholder="Search tasks..." aria-label="Search tasks">
+                </div>
+                <div class="filters-group">
+                    <select id="status-filter" class="select-filter" aria-label="Filter by completion status">
+                        <option value="all">All Tasks</option>
+                        <option value="active">Active</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                    <select id="priority-filter" class="select-filter" aria-label="Filter by priority level">
+                        <option value="all">All Priorities</option>
+                        <option value="high">High Priority</option>
+                        <option value="medium">Medium Priority</option>
+                        <option value="low">Low Priority</option>
+                    </select>
+                    <select id="sort-filter" class="select-filter" aria-label="Sort tasks order">
+                        <option value="date-added-desc">Newest Added</option>
+                        <option value="date-added-asc">Oldest Added</option>
+                        <option value="due-date-asc">Due Date</option>
+                        <option value="priority-desc">Highest Priority</option>
+                    </select>
+                    <button id="add-task-btn" class="btn-primary" aria-haspopup="dialog" aria-controls="task-modal">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>New Task</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Task List Wrapper -->
+            <div id="todo-list" class="todo-list-wrapper">
+                <!-- Dynamic Task items inserted here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Task Add/Edit Modal dialog -->
+    <div id="task-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 id="modal-title" class="modal-title">Create Task</h2>
+                <button id="close-modal-btn" class="close-modal-btn" aria-label="Close dialog"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="task-form">
+                <div class="form-group">
+                    <label for="task-title">Task Title *</label>
+                    <input type="text" id="task-title" class="form-control" placeholder="What needs to be done?" required>
+                </div>
+                <div class="form-group">
+                    <label for="task-desc">Description</label>
+                    <textarea id="task-desc" class="form-control" placeholder="Enter task details or subtasks..."></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="task-category">Category</label>
+                        <select id="task-category" class="form-control">
+                            <!-- Dynamic populated categories options -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-priority">Priority</label>
+                        <select id="task-priority" class="form-control">
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="task-due-date">Due Date</label>
+                    <input type="date" id="task-due-date" class="form-control">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" id="cancel-modal-btn" class="btn-secondary">Cancel</button>
+                    <button type="submit" id="submit-task-btn" class="btn-primary">
+                        <span id="submit-btn-text">Add Task</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- App Logic -->
+    <script src="app.js"></script>
+</body>
+</html>
