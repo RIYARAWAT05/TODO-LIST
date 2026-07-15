@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Taskflow — Premium Todo List Manager</title>
-    <meta name="description" content="Manage your daily tasks, set priorities, track deadlines, and organize your work using Taskflow, the modern and elegant Todo list.">
+    <meta name="description"
+        content="Manage your daily tasks, set priorities, track deadlines, and organize your work using Taskflow, the modern and elegant Todo list.">
     <!-- Google Fonts - Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <!-- Confetti Canvas for celebration -->
     <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
@@ -70,12 +74,15 @@
                 <ul id="category-list" class="category-list">
                     <!-- Dynamic Categories inserted here -->
                 </ul>
-                
+
                 <!-- Add Category Form -->
                 <form id="add-category-form" class="add-category-form" aria-label="Add new category">
-                    <input type="text" id="new-category-name" class="add-category-input" placeholder="New tag..." required aria-label="Category name">
-                    <input type="color" id="new-category-color" class="add-category-color" value="#818cf8" title="Choose color" aria-label="Category color">
-                    <button type="submit" class="add-category-btn" aria-label="Add category"><i class="fa-solid fa-plus"></i></button>
+                    <input type="text" id="new-category-name" class="add-category-input" placeholder="New tag..."
+                        required aria-label="Category name">
+                    <input type="color" id="new-category-color" class="add-category-color" value="#818cf8"
+                        title="Choose color" aria-label="Category color">
+                    <button type="submit" class="add-category-btn" aria-label="Add category"><i
+                            class="fa-solid fa-plus"></i></button>
                 </form>
             </section>
         </aside>
@@ -83,12 +90,13 @@
         <!-- Task Content Area -->
         <section class="todo-content" aria-label="Task Management Dashboard">
             <h1 style="display: none;">Taskflow Dashboard</h1>
-            
+
             <!-- Controls: Search & Filters -->
             <div class="controls-panel">
                 <div class="search-box">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="search-input" class="search-input" placeholder="Search tasks..." aria-label="Search tasks">
+                    <input type="text" id="search-input" class="search-input" placeholder="Search tasks..."
+                        aria-label="Search tasks">
                 </div>
                 <div class="filters-group">
                     <select id="status-filter" class="select-filter" aria-label="Filter by completion status">
@@ -127,16 +135,19 @@
         <div class="modal-container">
             <div class="modal-header">
                 <h2 id="modal-title" class="modal-title">Create Task</h2>
-                <button id="close-modal-btn" class="close-modal-btn" aria-label="Close dialog"><i class="fa-solid fa-xmark"></i></button>
+                <button id="close-modal-btn" class="close-modal-btn" aria-label="Close dialog"><i
+                        class="fa-solid fa-xmark"></i></button>
             </div>
             <form id="task-form">
                 <div class="form-group">
                     <label for="task-title">Task Title *</label>
-                    <input type="text" id="task-title" class="form-control" placeholder="What needs to be done?" required>
+                    <input type="text" id="task-title" class="form-control" placeholder="What needs to be done?"
+                        required>
                 </div>
                 <div class="form-group">
                     <label for="task-desc">Description</label>
-                    <textarea id="task-desc" class="form-control" placeholder="Enter task details or subtasks..."></textarea>
+                    <textarea id="task-desc" class="form-control"
+                        placeholder="Enter task details or subtasks..."></textarea>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
@@ -171,4 +182,5 @@
     <!-- App Logic -->
     <script src="app.js"></script>
 </body>
+
 </html>
