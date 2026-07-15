@@ -1,3 +1,11 @@
+// Auth Session Check
+let currentUser = null;
+if (localStorage.getItem('todo_current_user')) {
+    currentUser = JSON.parse(localStorage.getItem('todo_current_user'));
+} else {
+    window.location.href = 'LOGIN.HTML';
+}
+
 // State Management
 let tasks = [];
 let categories = {
@@ -32,9 +40,18 @@ const confettiCanvas = document.getElementById('confetti-canvas');
 
 // Initialize App
 document.addEventListener('DOMContentLoaded', () => {
-    // Load local storage
-    if (localStorage.getItem('todo_tasks')) {
-        tasks = JSON.parse(localStorage.getItem('todo_tasks'));
+    // Render user profile info in header
+    if (currentUser) {
+        document.getElementById('user-name').textContent = currentUser.username;
+        document.getElementById('user-avatar').textContent = currentUser.username.charAt(0);
+    }
+
+    // Load local storage (namespaced per user)
+    const taskStorageKey = `todo_tasks_${currentUser.username}`;
+    const categoryStorageKey = `todo_categories_${currentUser.username}`;
+
+    if (localStorage.getItem(taskStorageKey)) {
+        tasks = JSON.parse(localStorage.getItem(taskStorageKey));
     } else {
         // Initial dummy data to make the app look complete and pre-populated
         tasks = [
@@ -72,8 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
         saveTasks();
     }
 
-    if (localStorage.getItem('todo_categories')) {
-        categories = JSON.parse(localStorage.getItem('todo_categories'));
+    if (localStorage.getItem(categoryStorageKey)) {
+        categories = JSON.parse(localStorage.getItem(categoryStorageKey));
     } else {
         saveCategories();
     }
@@ -131,6 +148,12 @@ function setupEventListeners() {
 
     // Add Category Form
     addCategoryForm.addEventListener('submit', handleAddCategory);
+
+    // Logout Button Control
+    document.getElementById('logout-btn').addEventListener('click', () => {
+        localStorage.removeItem('todo_current_user');
+        window.location.href = 'LOGIN.HTML';
+    });
 }
 
 // Theme Controls
@@ -477,18 +500,18 @@ function updateStats() {
     pendingTasksEl.textContent = pending;
 
     // Update Progress Bar
-    const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+        const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
     progressBarFill.style.width = `${percent}%`;
     progressPercentEl.textContent = `${percent}%`;
 }
 
-// Local Storage Sync
+// Local Storage Sync (Namespaced per User)
 function saveTasks() {
-    localStorage.setItem('todo_tasks', JSON.stringify(tasks));
+    localStorage.setItem(`todo_tasks_${currentUser.username}`, JSON.stringify(tasks));
 }
 
 function saveCategories() {
-    localStorage.setItem('todo_categories', JSON.stringify(categories));
+    localStorage.setItem(`todo_categories_${currentUser.username}`, JSON.stringify(categories));
 }
 
 // Utility Helpers
